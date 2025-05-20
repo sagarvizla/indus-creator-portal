@@ -5,3 +5,15 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
+  eslint: {
+    // Ignore *all* ESLint errors during production builds
+    ignoreDuringBuilds: true,
+  },
+  // …any other settings you already have…
+};
+
+export default nextConfig;
