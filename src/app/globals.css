@@ -1,33 +1,26 @@
-/* globals.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
 
 body {
-  background-color: #f8fafc; /* slate-50 - matches the dashboard bg */
-  color: #0f172a; /* slate-900 - good default text color */
-  -webkit-font-smoothing: antialiased; /* Improves font rendering on WebKit browsers */
-  -moz-osx-font-smoothing: grayscale; /* Improves font rendering on Firefox */
-  margin: 0; /* Remove default browser margin */
-  padding: 0; /* Remove default browser padding */
-  min-height: 100vh; /* Ensure body takes at least full viewport height */
-  display: flex; /* Helps with layouts that need to fill height */
-  flex-direction: column; /* Helps with layouts that need to fill height */
-}
-
-/* Ensure root element for Next.js also takes full height */
-#__next {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Optional: Basic link styling */
-a {
-  color: #0ea5e9; /* sky-500 */
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
 }
