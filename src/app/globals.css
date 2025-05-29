@@ -1,26 +1,91 @@
-@import "tailwindcss";
+/* Ensure these are at the very top of your globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Light Theme Variables - from your original working version */
+  --background: 255, 255, 255; /* #ffffff */
+  --foreground: 23, 23, 23;   /* #171717 */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Define your primary font variable - assuming Geist Sans is set up in layout.tsx via next/font
+     and exposed as a CSS variable. Adjust '--font-geist-sans' if your variable name is different.
+     If you are not using next/font for Geist, this variable won't be defined, and the fallbacks will be used.
+  */
+  --font-family-sans: var(--font-geist-sans, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+  --font-family-mono: var(--font-geist-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+
+  /* Accent Colors (Optional - you can define and use these) */
+  --primary-accent-rgb: 59, 130, 246; /* A nice blue */
+  --secondary-accent-rgb: 16, 185, 129; /* A teal/green */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Dark Theme Variables - from your original working version */
+    --background: 10, 10, 10;     /* #0a0a0a */
+    --foreground: 237, 237, 237; /* #ededed */
+
+    /* Dark mode accent colors (Optional) */
+    --primary-accent-rgb: 96, 165, 250;   /* Lighter blue for dark mode */
+    --secondary-accent-rgb: 52, 211, 153; /* Lighter teal/green for dark mode */
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+html {
+  font-family: var(--font-family-sans);
+  color: rgb(var(--foreground));
+  background-color: rgb(var(--background)); /* Apply background to html for full page coverage */
+  
+  /* Smooth scrolling for anchor links */
+  scroll-behavior: smooth;
+
+  /* Improved text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
+
+body {
+  /* Body inherits color and background from html by default. 
+     You can add specific body styles here if needed, but for basic theming,
+     styling `html` is often sufficient and ensures consistency.
+     Ensure body takes up at least the full viewport height.
+  */
+  min-height: 100vh;
+  margin: 0; /* Remove default browser margin */
+}
+
+/* Basic Link Styling - Enhances default link appearance */
+a {
+  color: rgb(var(--primary-accent-rgb)); /* Use your primary accent color */
+  text-decoration: none; /* Remove underline by default */
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  text-decoration: underline; /* Add underline on hover */
+  color: rgb(var(--secondary-accent-rgb)); /* Optional: change color on hover */
+}
+
+/*
+  You can add more custom component styles or utility-like classes below,
+  but it's often best to rely on Tailwind utility classes directly in your JSX/TSX
+  for most styling needs to keep things maintainable.
+  
+  Example of a very simple animation class you could apply:
+*/
+@keyframes simpleFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.simple-fade-in {
+  animation: simpleFadeIn 0.5s ease-out forwards;
+}
+
+/*
+  If you had specific custom classes in your "previous one that worked very perfectly"
+  (other than the theme variables), you can re-add them here below the
+  @tailwind directives and the :root styles.
+*/
