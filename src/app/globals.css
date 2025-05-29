@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Add these to your globals.css file */
 
 /* Dark theme base for VideoSelector - you might want to apply this to body if the whole app is dark */
