@@ -30,19 +30,27 @@ const CheckCircleIcon = () => (
     </svg>
 );
 
+// Simple Spinner Icon
+const SpinnerIcon = () => (
+    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+);
+
 
 export default function Home() {
   const { data: session, status } = useSession();
   const [channelInput, setChannelInput] = useState('');
   const [channelId, setChannelId] = useState<string | null>(null);
   const [changeCount, setChangeCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false); // New state for loading indicator
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
-  const [modalType, setModalType] = useState<'error' | 'success' | 'info'>('info'); // For styling modal
+  const [modalType, setModalType] = useState<'error' | 'success' | 'info'>('info');
 
-  // Load initial data from localStorage
   useEffect(() => {
     const savedId = localStorage.getItem('channelId');
     const count = parseInt(localStorage.getItem('channelChangeCount') || '0');
@@ -50,14 +58,12 @@ export default function Home() {
     setChangeCount(count);
   }, []);
 
-  // Function to show modal
   const showModal = useCallback((message: string, type: 'error' | 'success' | 'info' = 'info') => {
     setModalMessage(message);
     setModalType(type);
     setIsModalOpen(true);
   }, []);
 
-  // Function to extract Channel ID
   const extractChannelId = async (input: string): Promise<string | null> => {
     const trimmed = input.trim();
     if (trimmed.startsWith("UC") && trimmed.length === 24) return trimmed;
@@ -69,7 +75,6 @@ export default function Home() {
     if (handleMatch) {
       const handle = handleMatch[1];
       try {
-        // Ensure API key is available
         if (!process.env.NEXT_PUBLIC_YOUTUBE_API_KEY) {
           console.error("YouTube API Key is not configured.");
           showModal("Configuration error: YouTube API Key is missing.", "error");
@@ -101,42 +106,46 @@ export default function Home() {
     return null;
   };
 
-  // Handle saving channel ID
   const handleSave = async () => {
-    if (changeCount >= 2) {
+    if (changeCount >= 2 && !isLoading) { // Check isLoading to prevent re-triggering modal if already loading
       showModal("You’ve already set your channel twice. Further changes are disabled.", "error");
       return;
     }
 
-    const id = await extractChannelId(channelInput);
-    if (!id) {
-      // extractChannelId will call showModal with a specific error
-      if(!isModalOpen) { // Avoid showing generic error if specific one is already up
-         showModal("Could not resolve channel ID. Please check the link or try again.", "error");
+    setIsLoading(true); // Start loading
+    try {
+      const id = await extractChannelId(channelInput);
+      if (!id) {
+        if(!isModalOpen) {
+           showModal("Could not resolve channel ID. Please check the link or try again.", "error");
+        }
+        return;
       }
-      return;
+
+      setChannelId(id);
+      localStorage.setItem('channelId', id);
+
+      const newCount = changeCount + 1;
+      localStorage.setItem('channelChangeCount', newCount.toString());
+      setChangeCount(newCount);
+      showModal("Channel ID saved successfully!", "success");
+    } catch (error) {
+        // Catch any unexpected errors during the process
+        console.error("Unexpected error in handleSave:", error);
+        showModal("An unexpected error occurred. Please try again.", "error");
+    } finally {
+      setIsLoading(false); // Stop loading regardless of outcome
     }
-
-    setChannelId(id);
-    localStorage.setItem('channelId', id);
-
-    const newCount = changeCount + 1;
-    localStorage.setItem('channelChangeCount', newCount.toString());
-    setChangeCount(newCount);
-    showModal("Channel ID saved successfully!", "success");
   };
 
-  // Loading state
   if (status === 'loading') {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen bg-slate-50 p-6">
         <p className="text-lg font-medium text-slate-700">Loading your portal...</p>
-        {/* You could add a spinner here */}
       </main>
     );
   }
 
-  // Not authenticated state
   if (!session) {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-500 to-indigo-600 p-6 text-white">
@@ -155,7 +164,6 @@ export default function Home() {
     );
   }
 
-  // Authenticated, but no channel ID set
   if (!channelId) {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen bg-slate-100 p-6">
@@ -172,17 +180,30 @@ export default function Home() {
             onChange={(e) => setChannelInput(e.target.value)}
             className="border-slate-300 border px-4 py-3 rounded-md w-full mb-4 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-shadow"
             placeholder="e.g., UCxxxxxxxxxxxx or @YourHandle"
+            disabled={isLoading} // Disable input while loading
           />
           <button
             onClick={handleSave}
-            disabled={changeCount >= 2}
-            className="bg-sky-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-sky-700 transition-colors w-full shadow-md hover:shadow-lg disabled:bg-slate-400 disabled:cursor-not-allowed"
+            disabled={isLoading || changeCount >= 2} // Disable button while loading or if count exceeded
+            className="bg-sky-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-sky-700 transition-colors w-full shadow-md hover:shadow-lg disabled:bg-slate-400 disabled:cursor-not-allowed flex items-center justify-center"
           >
-            Save Channel ID
+            {isLoading ? (
+              <>
+                <SpinnerIcon />
+                Processing...
+              </>
+            ) : (
+              'Save Channel ID'
+            )}
           </button>
+          {isLoading && ( // Simple text loading bar below button
+            <div className="w-full bg-slate-200 rounded-full h-2.5 mt-3 overflow-hidden">
+                <div className="bg-sky-500 h-2.5 rounded-full animate-pulse" style={{ width: '100%' }}></div>
+            </div>
+          )}
           <p className="text-xs mt-4 text-slate-500">
             {changeCount < 2
-              ? `You can change this ${2 - changeCount} more time(s). We'll use it to fetch your videos.`
+              ? `You can change this ${2 - changeCount} more time(s).`
               : "You cannot change your channel ID further."}
           </p>
         </div>
@@ -190,7 +211,6 @@ export default function Home() {
     );
   }
 
-  // Main dashboard view
   return (
     <main className="min-h-screen bg-slate-100 px-4 sm:px-6 lg:px-8 py-10">
       <div className="max-w-5xl mx-auto">
@@ -216,21 +236,18 @@ export default function Home() {
           </span>
         </div>
         
-        {/* VideoSelector component will be rendered here */}
         <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-xl font-semibold text-slate-700 mb-4">Your Videos</h2>
             <VideoSelector />
         </div>
       </div>
 
-      {/* Modal for Notifications */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-opacity duration-300 ease-in-out">
           <div className="bg-white p-6 rounded-lg shadow-2xl w-full max-w-md transform transition-all duration-300 ease-in-out scale-100">
             <div className="flex items-start mb-4">
               {modalType === 'error' && <AlertTriangleIcon />}
               {modalType === 'success' && <CheckCircleIcon />}
-              {/* Add other icons for 'info' if needed */}
               <h3 className={`text-lg font-semibold ${
                 modalType === 'error' ? 'text-red-700' : 
                 modalType === 'success' ? 'text-green-700' : 'text-slate-800'
@@ -240,7 +257,11 @@ export default function Home() {
             </div>
             <p className="text-slate-600 mb-6 text-sm">{modalMessage}</p>
             <button
-              onClick={() => setIsModalOpen(false)}
+              onClick={() => {
+                setIsModalOpen(false);
+                // If the modal was shown due to loading, and loading is finished,
+                // we don't want to re-enable the button here if it should remain disabled (e.g. changeCount >= 2)
+              }}
               className="bg-sky-600 text-white px-5 py-2 rounded-md font-semibold hover:bg-sky-700 transition-colors w-full"
             >
               Close
