@@ -1,17 +1,15 @@
-// Force this API route to run in Node.js (so `crypto` is available)
-export const runtime = 'nodejs';
-
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-const handler = NextAuth({
+export const config = {
   providers: [
     GoogleProvider({
-      clientId:     process.env.GOOGLE_CLIENT_ID!,
+      clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
 
+const handler = NextAuth(config);
 export { handler as GET, handler as POST };
