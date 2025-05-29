@@ -6,224 +6,224 @@
 
 /* Dark theme base for VideoSelector - you might want to apply this to body if the whole app is dark */
 .bg-dark-theme {
-background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
 }
 
-/* Custom scrollbar (optional, for a cleaner look on month selector) /
+/* Custom scrollbar (optional, for a cleaner look on month selector) */ /* FIXED: Added closing */
 .hide-scrollbar::-webkit-scrollbar {
-display: none; / Safari and Chrome /
+  display: none; /* Safari and Chrome */
 }
 .hide-scrollbar {
--ms-overflow-style: none;  / IE and Edge /
-scrollbar-width: none;  / Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */ /* FIXED: Removed extraneous */
 }
 
-/* Video Card Styles from your HTML /
+/* Video Card Styles from your HTML */ /* FIXED: Added closing */
 .video-card {
-transition: all 0.3s ease;
-transform: translateY(0);
-border: 2px solid transparent; / Base border /
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  border: 2px solid transparent; /* Base border */
 }
 .video-card:hover {
-transform: translateY(-5px);
-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); / Adjusted shadow for dark theme /
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* Adjusted shadow for dark theme */
 }
 .video-card.selected {
-border-color: #4ade80; / Green accent */
-box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
+  border-color: #4ade80; /* Green accent */ /* FIXED: Added closing */
+  box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
 }
 
-/* Month Selector Styles /
+/* Month Selector Styles */ /* FIXED: Added closing */
 .month-selector {
-background: rgba(255, 255, 255, 0.03); / Subtle background /
-backdrop-filter: blur(10px);
-border-radius: 12px;
-border: 1px solid rgba(255, 255, 255, 0.05);
-overflow: hidden; / Ensures rounded corners clip content /
+  background: rgba(255, 255, 255, 0.03); /* Subtle background */
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden; /* Ensures rounded corners clip content */
 }
 .month-item {
-transition: all 0.2s ease;
-cursor: pointer;
-position: relative;
-color: #cbd5e1; / slate-300 /
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  color: #cbd5e1; /* slate-300 */
 }
 .month-item:hover {
-background-color: rgba(255, 255, 255, 0.07);
-color: #f1f5f9; / slate-100 /
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #f1f5f9; /* slate-100 */
 }
 .month-item.active {
-background-color: rgba(74, 222, 128, 0.15); / Green accent, slightly more visible /
-color: #4ade80; / Green text */
-font-weight: 600;
+  background-color: rgba(74, 222, 128, 0.15); /* Green accent, slightly more visible */
+  color: #4ade80; /* Green text */ /* FIXED: Added closing */
+  font-weight: 600;
 }
 .month-item.active::after {
-content: '';
-position: absolute;
-bottom: 0;
-left: 0;
-width: 100%;
-height: 3px;
-background: #4ade80;
-animation: slideIn 0.3s ease forwards;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #4ade80;
+  animation: slideIn 0.3s ease forwards;
 }
 @keyframes slideIn {
-from { transform: scaleX(0); }
-to { transform: scaleX(1); }
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
-/* Modal Animations /
-.modal { / Applied to the modal backdrop /
-animation: fadeIn 0.3s ease forwards;
+/* Modal Animations */ /* FIXED: Added closing */
+.modal { /* Applied to the modal backdrop */
+  animation: fadeIn 0.3s ease forwards;
 }
-.modal-content { / Applied to the modal content box /
-animation: scaleIn 0.3s ease forwards;
+.modal-content { /* Applied to the modal content box */
+  animation: scaleIn 0.3s ease forwards;
 }
 @keyframes fadeIn {
-from { opacity: 0; }
-to { opacity: 1; }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 @keyframes scaleIn {
-from { transform: scale(0.95); opacity: 0; } / Slightly adjusted scale */
-to { transform: scale(1); opacity: 1; }
+  from { transform: scale(0.95); opacity: 0; } /* Slightly adjusted scale */ /* FIXED: Added closing */
+  to { transform: scale(1); opacity: 1; }
 }
 
-/* Button Styles & Effects /
+/* Button Styles & Effects */ /* FIXED: Added closing */
 .btn {
-transition: all 0.2s ease;
-position: relative;
-overflow: hidden;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
-.btn::after { / Ripple effect /
-content: '';
-position: absolute;
-top: 50%;
-left: 50%;
-width: 5px;
-height: 5px;
-background: rgba(255, 255, 255, 0.3); / Adjusted opacity for dark theme /
-opacity: 0;
-border-radius: 100%;
-transform: translate(-50%, -50%) scale(1);
-transition: all 0.5s ease;
+.btn::after { /* Ripple effect */
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.3); /* Adjusted opacity for dark theme */
+  opacity: 0;
+  border-radius: 100%;
+  transform: translate(-50%, -50%) scale(1);
+  transition: all 0.5s ease;
 }
 .btn:active::after {
-transform: translate(-50%, -50%) scale(40); / Increased scale for better visual /
-opacity: 0.2;
-transition: 0s;
+  transform: translate(-50%, -50%) scale(40); /* Increased scale for better visual */
+  opacity: 0.2;
+  transition: 0s;
 }
-.btn:hover:not(:disabled) { / Ensure hover effects don't apply when disabled /
-transform: translateY(-2px);
-box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3); / Adjusted shadow */
+.btn:hover:not(:disabled) { /* Ensure hover effects don't apply when disabled */
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3); /* Adjusted shadow */ /* FIXED: Added closing */
 }
 .btn:active:not(:disabled) {
-transform: translateY(1px);
+  transform: translateY(1px);
 }
 
-/* Shimmer/Skeleton Loader /
+/* Shimmer/Skeleton Loader */ /* FIXED: Added closing */
 .shimmer {
-background: linear-gradient(90deg,
-rgba(255,255,255,0.05) 0%,
-rgba(255,255,255,0.08) 50%,
-rgba(255,255,255,0.05) 100%);
-background-size: 200% 100%;
-animation: shimmer 1.5s infinite linear; / Added linear for smoother loop */
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.05) 0%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.05) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear; /* Added linear for smoother loop */ /* FIXED: Added closing */
 }
 @keyframes shimmer {
-0% { background-position: -200% 0; }
-100% { background-position: 200% 0; }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-/* Video Grid Animation /
+/* Video Grid Animation */ /* FIXED: Added closing */
 .video-grid {
-/ display: grid; / / Already handled by Tailwind /
-/ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); / / Tailwind: grid-cols-1 sm:grid-cols-2 etc. /
-/ gap: 20px; / / Tailwind: gap-5 /
-opacity: 0;
-transform: translateY(20px);
-animation: fadeUp 0.5s ease forwards 0.2s; / Added slight delay */
+  /* display: grid; */ /* Already handled by Tailwind */
+  /* grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); */ /* Tailwind: grid-cols-1 sm:grid-cols-2 etc. */
+  /* gap: 20px; */ /* Tailwind: gap-5 */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.5s ease forwards 0.2s; /* Added slight delay */ /* FIXED: Added closing */
 }
 @keyframes fadeUp {
-to {
-opacity: 1;
-transform: translateY(0);
-}
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Badges for Video Format /
+/* Badges for Video Format */ /* FIXED: Added closing */
 .badge {
-position: absolute;
-top: 12px; / Adjusted position /
-right: 12px;
-padding: 4px 10px; / Slightly more padding /
-border-radius: 6px; / More rounded /
-font-size: 11px; / Slightly smaller /
-font-weight: 700; / Bolder /
-z-index: 10;
-color: white;
-text-transform: uppercase;
-letter-spacing: 0.5px;
+  position: absolute;
+  top: 12px; /* Adjusted position */
+  right: 12px;
+  padding: 4px 10px; /* Slightly more padding */
+  border-radius: 6px; /* More rounded */
+  font-size: 11px; /* Slightly smaller */
+  font-weight: 700; /* Bolder */
+  z-index: 10;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.badge-video { background-color: #3b82f6; } / blue-500 /
-.badge-shorts { background-color: #ef4444; } / red-500 /
-.badge-live { background-color: #8b5cf6; }   / violet-500 */
+.badge-video { background-color: #3b82f6; } /* blue-500 */
+.badge-shorts { background-color: #ef4444; } /* red-500 */
+.badge-live { background-color: #8b5cf6; }  /* violet-500 */ /* FIXED: Added closing */
 
-/* Custom Checkbox Container on Video Card /
+/* Custom Checkbox Container on Video Card */ /* FIXED: Added closing */
 .checkbox-container {
-position: absolute;
-top: 12px;
-left: 12px;
-z-index: 10;
-width: 28px; / Slightly larger /
-height: 28px;
-background-color: rgba(0, 0, 0, 0.6);
-border-radius: 6px;
-display: flex;
-align-items: center;
-justify-content: center;
-transition: all 0.2s ease;
-border: 1px solid rgba(255,255,255,0.1);
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  width: 28px; /* Slightly larger */
+  height: 28px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 .checkbox-container svg {
-opacity: 0;
-transform: scale(0.5);
-transition: all 0.2s ease;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s ease;
 }
 .video-card.selected .checkbox-container {
-background-color: #4ade80; / Green accent */
-border-color: #3bb572;
+  background-color: #4ade80; /* Green accent */ /* FIXED: Added closing */
+  border-color: #3bb572;
 }
 .video-card.selected .checkbox-container svg {
-opacity: 1;
-transform: scale(1);
+  opacity: 1;
+  transform: scale(1);
 }
 
-/* Thumbnail Hover Effect /
+/* Thumbnail Hover Effect */ /* FIXED: Added closing */
 .thumbnail-container {
-overflow: hidden;
-border-radius: 0; / Top part of card, so no radius needed if card has it /
+  overflow: hidden;
+  border-radius: 0; /* Top part of card, so no radius needed if card has it */
 }
 .thumbnail-container img {
-transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); / Smoother ease /
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother ease */
 }
 .video-card:hover .thumbnail-container img {
-transform: scale(1.08); / Slightly more zoom */
+  transform: scale(1.08); /* Slightly more zoom */ /* FIXED: Added closing */
 }
 
-/* Channel Header Gradient Animation /
+/* Channel Header Gradient Animation */ /* FIXED: Added closing */
 .channel-header {
-background: linear-gradient(90deg, #4ade80, #3b82f6, #ec4899, #f59e0b); / More colorful gradient /
-background-clip: text;
--webkit-background-clip: text;
-color: transparent;
-animation: gradientShift 8s ease infinite; / Slower animation /
-background-size: 300% 100%; / Larger size for smoother shift */
+  background: linear-gradient(90deg, #4ade80, #3b82f6, #ec4899, #f59e0b); /* More colorful gradient */
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: gradientShift 8s ease infinite; /* Slower animation */
+  background-size: 300% 100%; /* Larger size for smoother shift */ /* FIXED: Added closing */
 }
 @keyframes gradientShift {
-0% { background-position: 0% 50%; }
-50% { background-position: 100% 50%; }
-100% { background-position: 0% 50%; }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* Tailwind Line Clamp Plugin (if not already installed) /
-/ If you haven't, install with npm install -D @tailwindcss/line-clamp /
-/ and add require('@tailwindcss/line-clamp') to your tailwind.config.js plugins array. */
+/* Tailwind Line Clamp Plugin (if not already installed) */ /* FIXED: Added closing */
+/* If you haven't, install with npm install -D @tailwindcss/line-clamp */
+/* and add require('@tailwindcss/line-clamp') to your tailwind.config.js plugins array. */
