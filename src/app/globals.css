@@ -1,68 +1,26 @@
-/* Ensure these are at the very top of your globals.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
-  /* Light Theme Variables */
-  --background: 255, 255, 255; /* #ffffff */
-  --foreground: 23, 23, 23;   /* #171717 */
+  --background: #ffffff;
+  --foreground: #171717;
+}
 
-  /* Accent Colors (Optional - you can define and use these) */
-  --primary-accent-rgb: 59, 130, 246; /* A nice blue */
-  --secondary-accent-rgb: 16, 185, 129; /* A teal/green */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Dark Theme Variables */
-    --background: 10, 10, 10;     /* #0a0a0a */
-    --foreground: 237, 237, 237; /* #ededed */
-
-    /* Dark mode accent colors (Optional) */
-    --primary-accent-rgb: 96, 165, 250;   /* Lighter blue for dark mode */
-    --secondary-accent-rgb: 52, 211, 153; /* Lighter teal/green for dark mode */
+    --background: #0a0a0a;
+    --foreground: #ededed;
   }
 }
 
-html {
-  /*
-    The primary font (Inter) is applied via `inter.className` in your layout.tsx.
-    The font-family stack below acts as a general fallback.
-  */
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  color: rgb(var(--foreground));
-  background-color: rgb(var(--background));
-  
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
 body {
-  min-height: 100vh;
-  margin: 0;
-}
-
-/* Basic Link Styling */
-a {
-  color: rgb(var(--primary-accent-rgb));
-  text-decoration: none;
-  transition: color 0.2s ease-in-out;
-}
-
-a:hover {
-  text-decoration: underline;
-  color: rgb(var(--secondary-accent-rgb));
-}
-
-/* Example of a very simple animation class you could apply */
-@keyframes simpleFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.simple-fade-in {
-  animation: simpleFadeIn 0.5s ease-out forwards;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
 }
