@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
-import { format as formatDate, startOfMonth, endOfMonth, parseISO } from 'date-fns'; // Added parseISO
+import { format as formatDate, startOfMonth, endOfMonth, parseISO } from 'date-fns';
 
 interface Video {
   id: string;
@@ -20,7 +20,7 @@ const months = [
   'July', 'August', 'September', 'October', 'November', 'December',
 ];
 
-// SVG Icons (can be moved to a separate file if used elsewhere)
+// SVG Icons
 const AlertTriangleIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-red-500 mr-3">
     <path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
@@ -51,15 +51,14 @@ const InfoIcon = () => (
     </svg>
 );
 
-
 export default function VideoSelector() {
   const { data: session, status } = useSession();
   const [channelTitle, setChannelTitle] = useState<string>('');
   const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth());
   const [sheetMonth, setSheetMonth] = useState<string>(months[new Date().getMonth()]);
   const [videos, setVideos] = useState<Video[]>([]);
-  const [loadingVideos, setLoadingVideos] = useState<boolean>(false); // Renamed 'loading' to be more specific
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false); // New state for submission
+  const [loadingVideos, setLoadingVideos] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -92,7 +91,7 @@ export default function VideoSelector() {
   const fetchVideos = useCallback(async () => {
     if (!channelId) return;
     setLoadingVideos(true);
-    setVideos([]); // Clear previous videos
+    setVideos([]);
 
     const year = new Date().getFullYear();
     const publishedAfter = startOfMonth(new Date(year, selectedMonth)).toISOString();
@@ -102,14 +101,14 @@ export default function VideoSelector() {
       const res = await axios.get('https://www.googleapis.com/youtube/v3/search', {
         params: {
           key: process.env.NEXT_PUBLIC_YOUTUBE_API_KEY,
-          part: 'snippet', channelId, maxResults: 50, // Increased maxResults
+          part: 'snippet', channelId, maxResults: 50,
           order: 'date', type: 'video', publishedAfter, publishedBefore,
         }
       });
       setVideos(
         res.data.items.map((item: any) => ({
           id: item.id.videoId,
-          url: `https://www.youtube.com/watch?v=${item.id.videoId}`, // Corrected YouTube URL
+          url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
           title: item.snippet.title,
           thumbnail: item.snippet.thumbnails.medium.url,
           publishedAt: item.snippet.publishedAt,
@@ -124,12 +123,12 @@ export default function VideoSelector() {
     } finally {
       setLoadingVideos(false);
     }
-  }, [channelId, selectedMonth, showModal]); // Added showModal to dependencies
+  }, [channelId, selectedMonth, showModal]);
 
   useEffect(() => {
     setSheetMonth(months[selectedMonth]);
     fetchVideos();
-  }, [selectedMonth, fetchVideos]); // fetchVideos is now a dependency
+  }, [selectedMonth, fetchVideos]);
 
   function toggleSelection(videoId: string) {
     setVideos(v => v.map(video => video.id === videoId ? { ...video, selected: !video.selected } : video));
@@ -150,11 +149,13 @@ export default function VideoSelector() {
       return;
     }
 
-    setIsSubmitting(true); // Start submission loading state
+    setIsSubmitting(true);
     const entries = selected.map(v => ({
-      link: v.url, // Using the corrected YouTube watch URL
+      link: v.url,
+      title: v.title,
       format: v.format,
       month: sheetMonth,
+      publishedAt: v.publishedAt,
     }));
 
     try {
@@ -166,8 +167,8 @@ export default function VideoSelector() {
       const data = await res.json();
 
       if (res.ok && data.status === 'success') {
-        showModal(`Successfully submitted ${selected.length} video(s) to the "${channelTitle}" sheet!`, 'success');
-        setVideos(currentVideos => currentVideos.map(v => ({ ...v, selected: false }))); // Deselect submitted videos
+        showModal(`Successfully submitted ${selected.length} video(s) to your Supabase database!`, 'success');
+        setVideos(currentVideos => currentVideos.map(v => ({ ...v, selected: false })));
       } else {
         throw new Error(data.message || 'Submission failed due to an unknown server error.');
       }
@@ -175,7 +176,7 @@ export default function VideoSelector() {
       console.error("Submission error:", err);
       showModal(`Submission failed: ${err.message}`, 'error');
     } finally {
-      setIsSubmitting(false); // End submission loading state
+      setIsSubmitting(false);
     }
   }
 
@@ -183,7 +184,6 @@ export default function VideoSelector() {
   if (!session) return (
     <div className="text-center py-10">
       <p className="text-slate-700 font-semibold">Please sign in to access the video selector.</p>
-      {/* Optionally, add a sign-in button here if not handled by parent page */}
     </div>
   );
   if (!channelId) return (
@@ -193,7 +193,6 @@ export default function VideoSelector() {
         <p className="text-amber-600 text-sm">Please set your YouTube Channel ID on the main page first.</p>
     </div>
   );
-
 
   return (
     <div className="space-y-8">
@@ -216,7 +215,7 @@ export default function VideoSelector() {
             </div>
         </div>
         <p className="text-sm text-slate-500">
-          Submitting to Google Sheet tab: <strong className="text-slate-700">{channelTitle || 'Loading channel name...'}</strong>
+          Submitting to Supabase database for channel: <strong className="text-slate-700">{channelTitle || 'Loading channel name...'}</strong>
         </p>
       </div>
 
@@ -242,20 +241,20 @@ export default function VideoSelector() {
               <img
                 src={video.thumbnail}
                 alt={video.title}
-                className="w-full h-40 object-cover" // Made thumbnail responsive
+                className="w-full h-40 object-cover"
               />
               <div className="p-4 space-y-3">
                 <a
                   href={video.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-sky-700 hover:text-sky-800 line-clamp-2" // Title styling
+                  className="font-semibold text-sky-700 hover:text-sky-800 line-clamp-2"
                   title={video.title}
                 >
                   {video.title}
                 </a>
                 <p className="text-xs text-slate-500">
-                  Uploaded: {formatDate(parseISO(video.publishedAt), 'MMM d, yyyy')} {/* Used parseISO */}
+                  Uploaded: {formatDate(parseISO(video.publishedAt), 'MMM d, yyyy')}
                 </p>
 
                 <label className="flex items-center space-x-2 cursor-pointer p-2 -ml-2 hover:bg-slate-50 rounded-md">
@@ -290,7 +289,7 @@ export default function VideoSelector() {
       )}
 
       {/* Submit Button Section */}
-      {videos.length > 0 && ( // Only show submit button if there are videos
+      {videos.length > 0 && (
         <div className="mt-10 pt-6 border-t border-slate-200 flex justify-center">
           <button
             onClick={handleSubmit}
