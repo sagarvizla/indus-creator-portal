@@ -10,14 +10,14 @@ export const authOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: 'jwt' as const,
+    strategy: 'jwt',
   },
   cookies: {
     sessionToken: {
       name: `next-auth.session-token`,
       options: {
         httpOnly: true,
-        sameSite: 'lax' as const,
+        sameSite: 'lax',
         path: '/',
         secure: process.env.NODE_ENV === 'production',
       },
