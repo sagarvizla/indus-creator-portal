@@ -1,4 +1,6 @@
-const nextConfig = {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
   // Tell Next.js to ignore all ESLint errors during the production build
   eslint: {
     ignoreDuringBuilds: true,
